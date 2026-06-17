@@ -467,6 +467,12 @@ body, html {
    📱 모바일(반응형) 디자인 수정
    ========================================= */
 @media screen and (max-width: 768px) {
+
+    #question-screen,
+    #result-screen {
+    /* 기존 100vh 대신 100dvh를 사용합니다 */
+    min-height: 100dvh; 
+    }
   
   /* 1. 시작 화면*/
   .main-logo {
