@@ -472,7 +472,7 @@ body, html {
   
   /* 1. 시작 화면*/
   .main-logo {
-    font-size: 3.5rem;
+    font-size: 3.0rem;
   }
   .description {
     font-size: 1rem; 
@@ -519,6 +519,12 @@ body, html {
     height: 24px;
   }
 
+
+  /* ---------------------------------------
+       결과 시리즈 및 로고 (완벽한 세로 배치)
+     --------------------------------------- */
+
+    
   .result-content {
     display: flex;
     flex-direction: column;
@@ -527,9 +533,6 @@ body, html {
     padding: 10px 0;
   }
 
-  /* ---------------------------------------
-     [1] 결과 시리즈 및 로고 (완벽한 세로 배치)
-     --------------------------------------- */
   .result-header {
     display: flex;
     flex-direction: column; 
@@ -582,7 +585,7 @@ body, html {
      --------------------------------------- */
   #catchphrase-box {
     width: 85%;            /* 가로 너비 축소 */
-    padding: 12px 15px;    /* 내부 여백 축소로 부피 줄임 */
+    padding: 25px 16px;    /* 내부 여백 축소로 부피 줄임 */
     font-size: 0.95rem;    /* 글자 크기 축소 */
     margin-bottom: 20px;
     text-align: center;
