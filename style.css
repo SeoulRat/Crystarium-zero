@@ -551,8 +551,8 @@ body, html {
   }
 
   #result-logo-img {
+    width: 300px;
     height: auto;
-    max-height: 200px;
     object-fit: contain;
   }
 
