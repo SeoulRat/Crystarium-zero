@@ -617,7 +617,7 @@ body, html {
   /* 🖼️ 캐러셀 모바일 크기 유지 */
   .carousel-banner {
     width: 90%;
-    height: 220px;
+    height: 200px;
     margin: 10px auto;
   }
 
