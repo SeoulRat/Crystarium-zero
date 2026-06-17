@@ -511,13 +511,23 @@ body, html {
     font-size: 1.12rem; 
     padding: 12px 20px;
   }
-  
 
-  .footer-tag img {
+    .footer-tag {
+    margin-top: 40px;
+    margin-bottom: 0;
+    padding-bottom: 60px;
+  }
+
+    .footer-tag img {
     height: 24px;
   }
 
+    /* 질문 화면 스크롤 하단 여백 확보 */
+  .bottom-question-area {
+    padding-bottom: 80px !important; 
+  }
 
+    
   /* ---------------------------------------
        결과 시리즈 및 로고 (완벽한 세로 배치)
      --------------------------------------- */
