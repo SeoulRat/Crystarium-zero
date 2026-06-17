@@ -484,20 +484,35 @@ body, html {
   }
 
   /* 2. 질문 화면 (#question-screen 내부) */
-  #question-text {
-    font-size: 1.5rem;
-    margin: 10px 0 20px;
+.question-box {
+    padding: 15px 20px;  
+    gap: 10px;   
+    border-width: 4px;   
+    box-shadow: 1px 1px 1px 4px rgba(0, 0, 0, 0.25) inset;
+    margin-bottom: 25px;   
   }
+
+  /* 2. 손가락 커서 크기 축소 */
+  .question-cursor {
+    height: 1.1rem;
+  }
+
+  /* 3. 질문 텍스트 크기 축소 */
+  #question-text {
+    font-size: 1.05rem; 
+  }
+    
   .options-container {
     width: 90%;   
     gap: 10px; 
   }
+      
   .option-btn {
     font-size: 1rem; 
     padding: 12px 20px;
   }
   
-  /* 모든 화면 공통 하단 태그 */
+
   .footer-tag img {
     height: 24px;
   }
