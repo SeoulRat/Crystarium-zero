@@ -486,14 +486,17 @@ body, html {
     padding: 12px 30px; 
   }
 
-  /* 🚨 [핵심 수정] 아이폰 상단 검은 여백 제거: 
-     화면을 맨 위(top:0)에 붙이고, 기존 빈 공간은 내부 여백(padding)으로 대체 */
-  #question-screen {
-    top: 0 !important;
-    height: 100dvh !important;
-    padding-top: 100px !important; 
+
+    #question-screen {
+    position: relative !important; 
+    width: 100%;
+    min-height: 100dvh !important; 
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+    padding-top: 100px;
     box-sizing: border-box;
-  }
+    }
 
   /* 2. 질문 화면 (#question-screen 내부) */
   .bg-video-question {
