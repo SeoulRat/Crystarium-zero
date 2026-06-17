@@ -467,6 +467,7 @@ body, html {
 }
 
 
+
 /* =========================================
    📱 모바일(반응형) 디자인 수정
    ========================================= */
@@ -485,9 +486,17 @@ body, html {
     padding: 12px 30px; 
   }
 
-  /* 2. 질문 화면 (#question-screen 내부) */
+  /* 🚨 [핵심 수정] 아이폰 상단 검은 여백 제거: 
+     화면을 맨 위(top:0)에 붙이고, 기존 빈 공간은 내부 여백(padding)으로 대체 */
+  #question-screen {
+    top: 0 !important;
+    height: 100dvh !important;
+    padding-top: 100px !important; 
+    box-sizing: border-box;
+  }
 
-    .bg-video-question {
+  /* 2. 질문 화면 (#question-screen 내부) */
+  .bg-video-question {
     position: fixed;
     top: 0;
     left: 0;
@@ -495,9 +504,9 @@ body, html {
     height: 100dvh;
     object-fit: cover;
     z-index: -1;
-    }
+  }
 
-.question-box {
+  .question-box {
     max-width: 380px;
     padding: 20px 25px;  
     gap: 10px;   
@@ -514,7 +523,7 @@ body, html {
   /* 3. 질문 텍스트 크기 축소 */
   #question-text {
     font-size: 1.2rem;
-      weight: 260;
+    font-weight: 260; /* 오타 수정됨 */
   }
     
   .options-container {
@@ -527,27 +536,25 @@ body, html {
     padding: 12px 20px;
   }
 
-    .footer-tag {
+  .footer-tag {
     margin-top: 40px;
     margin-bottom: 0;
     padding-bottom: 60px;
   }
 
-    .footer-tag img {
+  .footer-tag img {
     height: 24px;
   }
 
-    /* 질문 화면 스크롤 하단 여백 확보 */
+  /* 질문 화면 스크롤 하단 여백 확보 */
   .bottom-question-area {
     padding-bottom: 80px !important; 
   }
 
-    
   /* ---------------------------------------
-       결과 시리즈 및 로고 (완벽한 세로 배치)
-     --------------------------------------- */
+         결과 시리즈 및 로고 (완벽한 세로 배치)
+       --------------------------------------- */
 
-    
   .result-content {
     display: flex;
     flex-direction: column;
@@ -560,7 +567,7 @@ body, html {
     display: flex;
     flex-direction: column; 
     align-items: center;
-    gap: 15px;             
+    gap: 15px;              
     width: 100%;
     margin-bottom: 20px;
   }
@@ -588,8 +595,8 @@ body, html {
   }
 
   /* ---------------------------------------
-     [2] 플랫폼 로고 (간격 좁게, 사이즈 작게)
-     --------------------------------------- */
+       [2] 플랫폼 로고 (간격 좁게, 사이즈 작게)
+       --------------------------------------- */
   .platform-area {
     display: flex;
     flex-direction: row;
@@ -606,8 +613,8 @@ body, html {
   }
 
   /* ---------------------------------------
-     [3] 캐치프레이즈 박스 (더 축소)
-     --------------------------------------- */
+       [3] 캐치프레이즈 박스 (더 축소)
+       --------------------------------------- */
   #catchphrase-box {
     width: 85%;            /* 가로 너비 축소 */
     padding: 25px 16px;    /* 내부 여백 축소로 부피 줄임 */
@@ -617,8 +624,8 @@ body, html {
   }
 
   /* ---------------------------------------
-     [4] 설명 (수정 없음 - 화면 유지)
-     --------------------------------------- */
+       [4] 설명 (수정 없음 - 화면 유지)
+       --------------------------------------- */
   #result-desc-text {
     font-size: 0.95rem;
     line-height: 1.6;
@@ -628,8 +635,8 @@ body, html {
   }
 
   /* ---------------------------------------
-     [5] Back to main 버튼 (더 작게)
-     --------------------------------------- */
+       [5] Back to main 버튼 (더 작게)
+       --------------------------------------- */
   .back-btn {
     font-size: 1rem; 
     padding: 10px 24px;
@@ -644,10 +651,10 @@ body, html {
     margin: 10px auto;
   }
 
-    .carousel-track{
-        width: 100%;
-        height: 100%;
-    }
+  .carousel-track{
+    width: 100%;
+    height: 100%;
+  }
     
   .carousel-track img {
     width: 100%;
@@ -655,3 +662,4 @@ body, html {
   }
     
 }
+    
