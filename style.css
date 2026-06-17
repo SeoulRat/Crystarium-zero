@@ -578,8 +578,8 @@ body, html {
   }
 
   .platform-area img {
-    height: 30px;  
-    width: 35px;
+    height: 15px;  
+    width: auto;
   }
 
   /* ---------------------------------------
