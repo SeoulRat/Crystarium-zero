@@ -18,6 +18,10 @@ body, html {
     background-color: #000; /* 영상 로딩 전 기본 배경색 */
     font-family: 'Pretendard', sans-serif; /* 기본 폰트 지정 */
     color: #ffffff;
+    margin: 0;
+    padding: 0;
+    background-color: #000 !important;
+    overscroll-behavior-y: none; 
 }
 
 /* 메인 화면 전체 래퍼 */
@@ -482,6 +486,17 @@ body, html {
   }
 
   /* 2. 질문 화면 (#question-screen 내부) */
+
+    .bg-video-question {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    object-fit: cover;
+    z-index: -1;
+    }
+
 .question-box {
     max-width: 380px;
     padding: 20px 25px;  
