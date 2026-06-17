@@ -552,7 +552,7 @@ body, html {
 
   #result-logo-img {
     height: auto;
-    max-height: 55px;
+    max-height: 200px;
     object-fit: contain;
   }
 
