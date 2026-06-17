@@ -501,7 +501,8 @@ body, html {
 
   /* 3. 질문 텍스트 크기 축소 */
   #question-text {
-    font-size: 1.05rem; 
+    font-size: 0.8rem;
+      weight: 300;
   }
     
   .options-container {
