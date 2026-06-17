@@ -520,32 +520,122 @@ body, html {
     height: 24px;
   }
 
-  /* 3. 결과 화면 (#result-screen 내부) */
+ /* =========================================
+   📱 모바일(반응형) 디자인 최종 최적화 가이드
+   ========================================= */
+@media screen and (max-width: 768px) {
+  
+  /* [공통] 결과 화면 콘텐츠 영역 정렬 재정비 */
+  .result-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* 모바일 요소 전체 가로 중앙 정렬 */
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* ---------------------------------------
+     [1] 결과 시리즈 및 로고 세로 배치 수정
+     --------------------------------------- */
+  .result-header {
+    display: flex;
+    flex-direction: column; /* 가로 배열을 세로(↓) 배열로 변경 */
+    align-items: center;
+    gap: 15px;             /* 요소 간 간격 */
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* "추천드리는 시리즈는..." 상단 텍스트 박스 */
   .result-title-box {
     font-size: 1.1rem;
+    text-align: center;
+    width: auto;
   }
-  #result-series-name {
-    font-size: 1.8rem;
+
+  /* 로고 영역 내부 정렬 (세로 정렬로 변경) */
+  .result-logo-area {
+    display: flex;
+    flex-direction: column; /* 로고 이미지 아래 이름이 오도록 강제 */
+    align-items: center;
+    gap: 10px;
+    width: 100%;
   }
+
+  /* 시리즈 로고 이미지 크기 최적화 */
   #result-logo-img {
-    height: 60px;  
+    height: auto;
+    max-height: 55px;      /* 모바일에 부드럽게 매칭되는 로고 높이 */
+    width: auto;
+    object-fit: contain;
   }
+
+  /* 시리즈 이름 텍스트 */
+  #result-series-name {
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ---------------------------------------
+     [2] 플랫폼 로고 슬림화 (크기 축소 및 간격 좁힘)
+     --------------------------------------- */
+  .platform-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  .platform-area img {
+    height: 15px; 
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* ---------------------------------------
+     [3] 캐치프레이즈 박스 축소
+     --------------------------------------- */
+  .catchphrase-box {
+    width: 85%;   
+    padding: 12px 15px; 
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ---------------------------------------
+     [4] 설명 (수정 없음 - 화면 유지)
+     --------------------------------------- */
+  .result-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 0 25px;
+    text-align: center;
+    word-break: keep-all;
+  }
+
+  /* ---------------------------------------
+     [5] Back to main 버튼 축소
+     --------------------------------------- */
+  .back-btn {
+    font-size: 1rem;  
+    padding: 10px 24px; 
+    margin-top: 30px;
+    margin-bottom: 50px;  
+  }
+
+  /* 🖼️ 캐러셀 모바일 크기 자동 대응 */
   .carousel-banner {
-    width: 95%;  
+    width: 90%;
+    max-width: 450px;
+    margin: 10px auto;
   }
   .carousel-track img {
-    width: 100%;  
+    width: 100%;
     height: auto;
-  }
-  .platform-area img {
-    height: 20px;  
-  }
-  .result-description {
-    font-size: 1rem; 
-    padding: 0 15px;
-  }
-  .back-btn {
-    font-size: 1.2rem;
-    padding: 12px 30px; 
   }
 }
