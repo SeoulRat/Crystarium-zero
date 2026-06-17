@@ -520,11 +520,6 @@ body, html {
     height: 24px;
   }
 
- /* =========================================
-   📱 모바일(반응형)
-   ========================================= */
-@media screen and (max-width: 768px) {
-  
   .result-content {
     display: flex;
     flex-direction: column;
