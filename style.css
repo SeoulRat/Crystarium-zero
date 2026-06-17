@@ -555,7 +555,7 @@ body, html {
     max-width: 270px;
     height: auto;
     object-fit: contain;
-    margin-top: 70px;
+    margin-top: 50px;
   }
 
   #result-series-name {
