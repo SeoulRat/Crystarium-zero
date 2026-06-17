@@ -485,7 +485,7 @@ body, html {
 
   /* 2. 질문 화면 (#question-screen 내부) */
 .question-box {
-    max-width: 360px;
+    max-width: 380px;
     max-height: 80px;
     padding: 15px 20px;  
     gap: 10px;   
@@ -501,7 +501,7 @@ body, html {
 
   /* 3. 질문 텍스트 크기 축소 */
   #question-text {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
       weight: 300;
   }
     
@@ -511,7 +511,7 @@ body, html {
   }
       
   .option-btn {
-    font-size: 1.0rem; 
+    font-size: 1.3rem; 
     padding: 12px 20px;
   }
   
