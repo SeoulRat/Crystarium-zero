@@ -551,9 +551,10 @@ body, html {
   }
 
   #result-logo-img {
-    width: 300px;
+    width: 100%;
     height: auto;
     object-fit: contain;
+    margin-top: 70px;
   }
 
   #result-series-name {
