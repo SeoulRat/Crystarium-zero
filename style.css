@@ -468,12 +468,6 @@ body, html {
    ========================================= */
 @media screen and (max-width: 768px) {
 
-    #question-screen,
-    #result-screen {
-    /* 기존 100vh 대신 100dvh를 사용합니다 */
-    min-height: 100dvh; 
-    }
-  
   /* 1. 시작 화면*/
   .main-logo {
     font-size: 3.0rem;
@@ -634,13 +628,5 @@ body, html {
     width: 100%;
     height: auto;
   }
-  #result-screen .footer-tag  {
-        position: absolute;
-        bottom: calc(30px + env(safe-area-inset-bottom));
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
-    }
-
     
 }
