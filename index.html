@@ -741,7 +741,17 @@
             const videoElement = document.getElementById('banner-video');
             videoElement.querySelector('source').src = qData.videoSrc;
             videoElement.load(); 
-            videoElement.play();
+            let playPromise = videoElement.play(); // videoElement 부분은 실제 쓰신 변수명(예: bgVideo 등)으로 맞추세요.
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // 정상적으로 비디오가 재생됨
+                })
+                .catch(error => {
+                    // 비디오 재생이 취소되어도 에러를 삼키고 다음 코드를 정상 실행함
+                    console.log("비디오 전환이 빨라 재생이 취소되었으나 정상입니다.");
+                });
+            }
 
             // 2. 질문 텍스트 교체
             document.getElementById('question-text').innerText = `“ ${qData.text} “`;
