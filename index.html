@@ -15,7 +15,7 @@
     <meta name="twitter:url" content="https://crystarium-zero.com/">
     <meta name="twitter:title" content="Crystarium Zero">
     <meta name="twitter:description" content="파이널 판타지 14 위주로 플레이한 유저들을 위한, 선택지에 따라 파이널 판타지 시리즈를 추천해주는 사이트 입니다.">
-    <meta name="twitter:image" content="https://crystarium-zero.com/assets/og-image.jpg">  
+    <meta name="twitter:image" content="https://crystarium-zero.com/assets/og-image.jpg"> 
 </head>
 <body>
     <div class="main-wrapper">
@@ -29,7 +29,7 @@
                 해당 사이트는 '파이널 판타지 14'로 입문한 팬 분에게<br>
                 선택지에 따른 결과로 파이널 판타지 시리즈를 추천하는 팬 창작 사이트 입니다.
             </p>
-            <button class="start-btn" onclick="startTest()">PRESS START ▶</button>
+            <button class="start-btn" id="start-button">PRESS START ▶</button>
         </div>
         <div class="footer-tag">
             <img src="assets/madeby-tag.png" alt="Made by @ratmantist">
@@ -119,15 +119,22 @@
                 그야말로 시리즈의 원점이라 할 수 있는 작품입니다.<br><br>
                 <span>-Nintendo FINAL FANTASY 공식 설명 발췌-</span>
             </div>
-
+            <div class="result-description" id="result-desc-text">
+                    </div>
+                    <div class="ranking-section">
+                            <h2 class="ranking-title">SORT RANKING</h2>
+                            <div id="ranking-list" class="ranking-container">
+                            </div>
+                    </div>
+                    <button class="back-btn" onclick="location.reload()">Back to Main ▶</button>
+            </div>
             <button class="back-btn" onclick="location.reload()">Back to Main ▶</button>
-        </div>
-
-        <div class="footer-tag">
-            <img src="./assets/madeby-tag.png" alt="Made by @ratmantist">
+            <div class="footer-tag">
+                    <img src="assets/madeby-tag.png" alt="Made by @ratmantist">
+            </div>
         </div>
     </div>
-    <script>
+    <script type="module">
         // ==========================================
         // 1. 데이터베이스 (질문 및 결과 데이터)
         // ==========================================
@@ -140,6 +147,7 @@
         };
 
    // 질문 데이터베이스
+   
     const allQuestions = [
         {
             id: 1,
@@ -656,53 +664,91 @@
         };
 
         // ==========================================
-        // 2. 엔진 로직 (상태 관리 및 흐름 제어)
+        // 1. Firebase 초기 세팅 (import는 항상 맨 위에!)
         // ==========================================
-        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, increment, getDocs, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8uuJpJVLs9iatoV87cf31X7hL2zp4WCQ",
+            authDomain: "crystarium-zero.firebaseapp.com",
+            projectId: "crystarium-zero",
+            storageBucket: "crystarium-zero.firebasestorage.app",
+            messagingSenderId: "328696443106",
+            appId: "1:328696443106:web:dd9ad0a8adc31cf5486ebb",
+            measurementId: "G-K8VCM7KT72"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+
+        // ==========================================
+        // 2. 퀴즈 상태 관리 변수
+        // ==========================================
         let selectedQuestions = [];
         let currentQIndex = 0;
 
-        // 시작 버튼 클릭 시 실행
-        function startTest() {
-            const btn = document.querySelector('.start-btn');
+        // ==========================================
+        // 3. 페이지 초기화 및 시작 버튼 이벤트 연결
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", () => {
+            // 실시간 순위판 미리 불러오기
+            updateLiveRankingView();
+
+            // 시작 버튼 세팅
+            const startBtn = document.getElementById("start-button") || document.querySelector(".start-btn");
+            if (startBtn) {
+                startBtn.addEventListener("click", () => startTest(startBtn));
+            }
+        });
+
+        // 시작 로직 (로딩 연출 + 화면 전환)
+        function startTest(btn) {
+            console.log("👉 초코보 탑승! 퀴즈를 준비합니다.");
             btn.innerHTML = 'Loading...';
             btn.style.pointerEvents = 'none';
             btn.style.opacity = '0.7';
 
             setTimeout(() => {
-                document.querySelector('.main-wrapper').style.display = 'none';
-                document.getElementById('question-screen').style.display = 'flex';
+                // 화면 전환 (모바일 flex 강제 적용 포함)
+                const startScreen = document.getElementById("start-screen") || document.querySelector(".main-wrapper");
+                const questionScreen = document.getElementById("question-screen");
+
+                if (startScreen) startScreen.style.display = "none";
+                if (questionScreen) questionScreen.style.setProperty("display", "flex", "important");
+
                 initQuiz();
             }, 1500);
         }
 
-        // 퀴즈 초기화 (20개 중 10개 랜덤 추출)
+
+        // ==========================================
+        // 4. 퀴즈 핵심 흐름 로직
+        // ==========================================
         function initQuiz() {
-            // 질문 무작위 섞기 (피셔-예이츠 셔플)
+            // 20개 문항 섞어서 10개 추출
             let shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-            // 10개만 뽑기 (문제가 10개 미만이면 있는 만큼만)
             selectedQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
             currentQIndex = 0;
-            
             showQuestion();
         }
 
-        // 질문 화면 렌더링
         function showQuestion() {
             const qData = selectedQuestions[currentQIndex];
             
             // 1. 영상 교체 및 재생
             const videoElement = document.getElementById('banner-video');
             videoElement.querySelector('source').src = qData.videoSrc;
-            videoElement.load(); // 영상 소스가 바뀌면 load()를 호출해야 반영됨
+            videoElement.load(); 
             videoElement.play();
 
             // 2. 질문 텍스트 교체
             document.getElementById('question-text').innerText = `“ ${qData.text} “`;
 
-            // 3. 선택지 버튼 생성
+            // 3. 선택지 생성
             const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = ''; // 기존 버튼 비우기
+            optionsContainer.innerHTML = ''; 
 
             qData.options.forEach(option => {
                 const btn = document.createElement('button');
@@ -713,9 +759,8 @@
             });
         }
 
-        // 답변 클릭 처리 및 점수 누적
         function handleAnswer(points) {
-            // 선택된 항목의 점수를 전체 scores 통에 더함
+            // 점수 누적
             for (const [series, point] of Object.entries(points)) {
                 if (scores[series] !== undefined) {
                     scores[series] += point;
@@ -725,19 +770,21 @@
             currentQIndex++;
 
             if (currentQIndex < selectedQuestions.length) {
-                // 아직 질문이 남았으면 다음 질문 띄우기
-                showQuestion();
+                showQuestion(); // 다음 질문
             } else {
-                // 10개를 다 풀었으면 결과 계산
-                calculateResult();
+                calculateResult(); // 모든 질문 종료
             }
         }
 
-        // 최고 점수 계산 및 결과 렌더링
+
+      // ==========================================
+        // 5. 결과 산출 및 렌더링 로직
+        // ==========================================
         function calculateResult() {
             let topSeries = "";
             let maxScore = -1;
 
+            // 최고 점수 계산
             for (const [series, point] of Object.entries(scores)) {
                 if (point > maxScore) {
                     maxScore = point;
@@ -745,93 +792,183 @@
                 }
             }
 
-            console.log("최고 점수 시리즈: " + topSeries, "점수: " + maxScore);
+            console.log("🏆 추천 시리즈: " + topSeries, "점수: " + maxScore);
+            
+            // 결과가 나오면 파이어베이스에 투표 수 저장
+            saveResultToFirebase(topSeries);
             renderResultScreen(topSeries);
         }
+function renderResultScreen(winningSeries) {
+            // 1. 가장 먼저 안전하게 화면 전환부터 처리합니다 (최우선 실행)
+            const questionScreen = document.getElementById('question-screen');
+            const resultScreen = document.getElementById('result-screen');
+            
+            if (questionScreen) questionScreen.style.display = 'none';
+            if (resultScreen) {
+                resultScreen.style.display = 'flex';
+            } else {
+                console.error("🚨 HTML에 id='result-screen' 요소가 존재하지 않습니다!");
+                return;
+            }
 
-        function renderResultScreen(winningSeries) {
-            // 화면 전환
-            document.getElementById('question-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'flex';
-
-            // 우승 시리즈 데이터 가져오기 (데이터가 없으면 임시로 FF1 띄움)
             const rData = resultData[winningSeries] || resultData["FF1"];
 
-            // DOM 텍스트 및 로고 업데이트
-            document.getElementById('result-series-name').innerText = rData.title;
-            document.getElementById('result-logo-img').src = rData.logoSrc;
-            document.getElementById('result-desc-text').innerHTML = rData.desc;
+            // 2. 각 HTML 요소가 존재할 때만 안전하게 데이터를 주입합니다 (Null 크래시 방지)
+            const seriesNameEl = document.getElementById('result-series-name');
+            if (seriesNameEl) seriesNameEl.innerText = rData.title;
 
-            // 플랫폼 로고 업데이트
+            const logoImgEl = document.getElementById('result-logo-img');
+            if (logoImgEl) logoImgEl.src = rData.logoSrc;
+
+            const descTextEl = document.getElementById('result-desc-text');
+            if (descTextEl) descTextEl.innerHTML = rData.desc;
+
+            const catchphraseEl = document.getElementById('catchphrase-box');
+            if (catchphraseEl) catchphraseEl.innerText = rData.catchphrase;
+
+            // 플랫폼 로고 & 한국어 지원 업데이트
             const platformArea = document.querySelector('.platform-area');
-            platformArea.innerHTML = ''; // 기존 비우기
-            
-            rData.platforms.forEach(platform => {
-                const img = document.createElement('img');
-                img.src = `./assets/${platform}-logo-white.png`;
-                img.alt = platform;
-                platformArea.appendChild(img);
-            });
+            if (platformArea) {
+                platformArea.innerHTML = ''; 
+                
+                rData.platforms.forEach(platform => {
+                    const img = document.createElement('img');
+                    img.src = `./assets/${platform}-logo-white.png`;
+                    img.alt = platform;
+                    platformArea.appendChild(img);
+                });
 
-            // 한국어 지원 여부 뱃지 추가 (텍스트 박스 -> 이미지로 변경)
-            const korTag = document.createElement('img');
-            korTag.className = 'korean-tag-img'; // CSS 조절을 위해 클래스 이름 변경
-
-            if(rData.isKorean) {
-                korTag.src = './assets/kor-yes_tag.png';
-                korTag.alt = '한국어 지원 O';
-            } else {
-                korTag.src = './assets/kor-no_tag.png';
-                korTag.alt = '한국어 지원 X';
+                const korTag = document.createElement('img');
+                korTag.className = 'korean-tag-img'; 
+                korTag.src = rData.isKorean ? './assets/kor-yes_tag.png' : './assets/kor-no_tag.png';
+                korTag.alt = rData.isKorean ? '한국어 지원 O' : '한국어 지원 X';
+                platformArea.appendChild(korTag);
             }
-            platformArea.appendChild(korTag);
             
-            // 2. 캐치프레이즈 박스 제어
-            const catchphraseBox = document.getElementById('catchphrase-box');
-            catchphraseBox.innerText = rData.catchphrase;
-
-            // 슬라이드 배너 이미지 세팅
+            // 캐러셀 이미지 세팅 및 시작
             const track = document.getElementById('carousel-track');
-            track.innerHTML = ''; // 기존 이미지 비우기
-            rData.images.forEach(imgName => {
-                const img = document.createElement('img');
-                img.src = `./assets/${imgName}`;
-                track.appendChild(img);
-            });
+            if (track) {
+                track.innerHTML = ''; 
+                rData.images.forEach(imgName => {
+                    const img = document.createElement('img');
+                    img.src = `./assets/${imgName}`;
+                    track.appendChild(img);
+                });
+                startCarousel();
+            }
+        }
 
-            // 캐러셀 시작!
-            startCarousel();
+            // ==========================================
+            // 6. 파이어베이스(Firebase) 데이터 통신 및 실시간 랭킹 로직
+            // ==========================================
+            async function saveResultToFirebase(seriesName) {
+                const seriesRef = doc(db, "rankings", seriesName);
+                try {
+                    await setDoc(seriesRef, { 
+                        name: seriesName, 
+                        count: increment(1) 
+                    }, { merge: true });
+                    
+                    updateLiveRankingView();
+                } catch (error) {
+                    console.error("❌ 순위 저장 실패:", error);
+                    updateLiveRankingView(); 
+                }
+            }
+
+            const seriesMeta = {
+                "FF1": { title: "FINAL FANTASY I", logo: "./assets/FF1-logo.png" },
+                "FF2": { title: "FINAL FANTASY II", logo: "./assets/FF2-logo.png" },
+                "FF3": { title: "FINAL FANTASY III", logo: "./assets/FF3-logo.png" },
+                "FF4": { title: "FINAL FANTASY IV", logo: "./assets/FF4-logo.png" },
+                "FF5": { title: "FINAL FANTASY V", logo: "./assets/FF5-logo.png" },
+                "FF6": { title: "FINAL FANTASY VI", logo: "./assets/FF6-logo.png" },
+                "FF7": { title: "FINAL FANTASY VII", logo: "./assets/FF7-logo.png" },
+                "FF8": { title: "FINAL FANTASY VIII", logo: "./assets/FF8-logo.png" },
+                "FF9": { title: "FINAL FANTASY IX", logo: "./assets/FF9-logo.png" },
+                "FF10": { title: "FINAL FANTASY X", logo: "./assets/FF10-logo.png" },
+                "FF11": { title: "FINAL FANTASY XI", logo: "./assets/FF11-logo.png" },
+                "FF12": { title: "FINAL FANTASY XII", logo: "./assets/FF12-logo.png" },
+                "FF13": { title: "FINAL FANTASY XIII", logo: "./assets/FF13-logo.png" },
+                "FF15": { title: "FINAL FANTASY XV", logo: "./assets/FF15-logo.png" },
+                "FF16": { title: "FINAL FANTASY XVI", logo: "./assets/FF16-logo.png" },
+                "FFT": { title: "TACTICS", logo: "./assets/FFT-logo.png" },
+                "FFType-0": { title: "Type-0", logo: "./assets/FFType-0-logo.png" }
+            };
+
+            async function updateLiveRankingView() {
+                const rankingListEl = document.getElementById("ranking-list");
+                if (!rankingListEl) return;
+
+                try {
+                    const querySnapshot = await getDocs(collection(db, "rankings"));
+                    
+                    let allRankings = [];
+                    let totalCount = 0;
+
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const count = data.count || 0;
+                        allRankings.push({ name: data.name, count: count });
+                        totalCount += count;
+                    });
+
+                    allRankings.sort((a, b) => b.count - a.count);
+                    const top3 = allRankings.slice(0, 3);
+                    
+                    let htmlContent = "";
+                    const rankBadges = ["1st", "2nd", "3rd"];
+
+                    top3.forEach((item, index) => {
+                        const meta = seriesMeta[item.name] || { title: item.name, logo: "./assets/default-logo.png" };
+                        const ratio = totalCount > 0 ? Math.round((item.count / totalCount) * 100) : 0;
+                        const rankBadge = rankBadges[index];
+
+                        htmlContent += `
+                            <div class="ranking-item">
+                                <div class="logo-box">
+                                    <img src="${meta.logo}" alt="${meta.title} Logo">
+                                </div>
+                                <div class="text-box">
+                                    <span class="rank-badge">${rankBadge}</span>
+                                    <h3 class="series-title">${meta.title}</h3>
+                                    <p class="rank-desc">테스트를 하신 분들 중 ${ratio}%가 해당 시리즈를 추천받았습니다.</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    rankingListEl.innerHTML = htmlContent || "<p style='text-align:center; color:#fff;'>아직 집계된 데이터가 없습니다.</p>";
+                } catch (error) {
+                    console.error("❌ 실시간 랭킹을 가져오지 못했습니다:", error);
+                    rankingListEl.innerHTML = "<p style='text-align:center; color:#ff4d4d;'>랭킹 데이터를 불러오는 중 오류가 발생했습니다.</p>";
+                }
         }
 
         // ==========================================
-        // 3. 결과 화면 슬라이드 배너 (캐러셀) 로직
+        // 이미지 슬라이드(캐러셀) 작동 로직
         // ==========================================
         let carouselInterval;
         let currentSlideIndex = 0;
-        
+
         function startCarousel() {
             const track = document.getElementById('carousel-track');
             if (!track) return; 
 
             const slides = track.querySelectorAll('img');
             const totalSlides = slides.length;
-
             if (totalSlides <= 1) return;
 
             if (carouselInterval) clearInterval(carouselInterval);
-            currentSlideIndex = 0; // 캐러셀 위치 초기화
+            currentSlideIndex = 0; 
             track.style.transform = `translateX(0px)`; 
 
             carouselInterval = setInterval(() => {
                 currentSlideIndex++;
-                
-                if (currentSlideIndex >= totalSlides) {
-                    currentSlideIndex = 0;
-                }
+                if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
                 
                 const slideWidth = slides[0].clientWidth;
                 track.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
-                
             }, 3000); 
         }
     </script>
