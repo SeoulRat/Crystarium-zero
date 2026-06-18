@@ -120,16 +120,15 @@ body, html {
 ========================================= */
 #question-screen {
     width: 100%;
-    height: calc(100vh - 100px);
-    display: flex;
+    min-height: 100vh;
+    display: none;  
     flex-direction: column;
-    position: fixed; 
+    position: absolute;  
     top: 100px;
     left: 0;
     z-index: 20;
     background-color: #000;
-    overflow-y: auto; 
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
 }
 
 .bg-video-question {
@@ -153,7 +152,7 @@ body, html {
     position: relative;
     z-index: 10;
     box-sizing: border-box;
-    margin-bottom: 40px;
+    margin-bottom: 0;
 }
 
 /* 사각형 안에 가둬진 배너 비디오 스타일*/
@@ -173,8 +172,7 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-top: 370px;           
+    justify-content: center;         
     padding-bottom: 100px;   
     box-sizing: border-box;
     margin-bottom: 100px;
@@ -188,7 +186,7 @@ body, html {
     align-items: center;
     width: 100%;
     max-width: 900px;
-    margin-top: 30px;
+    margin-top: 70px;
 }
 
 /* 질문 박스 */
@@ -284,7 +282,7 @@ body, html {
     background-color: #000;
     overflow-y: auto; /* 내용이 길 경우 스크롤 허용 */
     padding-top: 100px; 
-    padding-bottom: 80px;
+    padding-bottom: 20px;
 }
 
 
@@ -459,7 +457,7 @@ body, html {
 /* 하단 태그 (결과 화면용 위치 조정) */
 #result-screen .footer-tag {
     position: relative;
-    margin-top: auto; 
+    margin-top: 70px; 
 }
 
 #result-screen .footer-tag img {
@@ -469,69 +467,94 @@ body, html {
 
 
 /* =========================================
-   📱 모바일(반응형) 디자인 수정
+   📱 모바일(반응형) 전용 디자인 수정
    ========================================= */
 @media screen and (max-width: 768px) {
 
-  /* 1. 시작 화면*/
+  /* ---------------------------------------
+     1. 시작 화면
+     --------------------------------------- */
+
+    .main-wrapper{
+        margin: center auto;
+    }
+
+
   .main-logo {
     font-size: 3.0rem;
   }
+  
   .description {
     font-size: 1rem; 
     padding: 0 20px; 
   }
+  
   .start-btn {
     font-size: 1.2rem;
     padding: 12px 30px; 
   }
 
-
+  /* ---------------------------------------
+     2. 질문 화면 (스크롤 및 잘림 방지 최적화)
+     --------------------------------------- */
     #question-screen {
-    position: relative !important; 
-    width: 100%;
-    min-height: 100dvh !important; 
-    display: flex;
-    flex-direction: column;
-    z-index: 20;
-    padding-top: 100px;
-    box-sizing: border-box;
-    }
-
-  /* 2. 질문 화면 (#question-screen 내부) */
-  .bg-video-question {
-    position: fixed;
+    position: fixed !important;  
     top: 0;
     left: 0;
+    width: 100vw !important;
+    height: 100dvh !important;   
+    flex-direction: column !important;
+    justify-content: flex-start !important; 
+    align-items: center !important;
+    z-index: 20;
+    padding-top: 4vh !important;           
+    padding-bottom: 40px !important;        
+    background: transparent !important;     
+    overflow-y: auto !important;  
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box;
+  }
+  
+    .bg-video-question {
+    position: fixed !important;
+    top: 0;
     width: 100vw;
-    height: 100dvh;
+    height: 100%; 
     object-fit: cover;
     z-index: -1;
   }
 
-  .question-box {
-    max-width: 380px;
-    padding: 20px 25px;  
-    gap: 10px;   
-    border-width: 4px;   
-    box-shadow: 1px 1px 1px 4px rgba(0, 0, 0, 0.25) inset;
-    margin-bottom: 25px;   
-  }
+  .top-banner {
+    position: absolute !important;
+    top: 0;
+    padding: 0; 
+    margin-top: 0;
+    }
 
-  /* 2. 손가락 커서 크기 축소 */
+    .question-box {
+    position: relative !important;
+    width: 90% !important;
+    height: auto !important;
+    max-width: 380px;
+    margin-top: 500px;  
+    padding: 10px 12px;  
+    gap: 10px;   
+    box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.25) inset;
+     }
+
   .question-cursor {
     height: 1.1rem;
   }
 
-  /* 3. 질문 텍스트 크기 축소 */
   #question-text {
     font-size: 1.2rem;
-    font-weight: 260; /* 오타 수정됨 */
+    font-weight: 260; 
   }
     
-  .options-container {
-    width: 90%;   
+    .options-container {
+    width: 90% !important;   
     gap: 10px; 
+    margin-bottom: 20px !important;         
   }
       
   .option-btn {
@@ -539,31 +562,37 @@ body, html {
     padding: 12px 20px;
   }
 
+/* ---------------------------------------
+     이름 태그(출처) 모바일 최적화 (절대 안 잘림!)
+     --------------------------------------- */
+  .bottom-question-area .footer-tag,
   .footer-tag {
-    margin-top: 40px;
-    margin-bottom: 0;
-    padding-bottom: 60px;
+    position: relative !important;  
+    bottom: auto !important; 
+    left: auto !important;
+    transform: none !important;
+    margin-top: 20px !important;  
+    margin-bottom: 0 !important;
+    padding-bottom: 60px !important;  
+    display: flex;
+    justify-content: center;   
+    width: 100%;
   }
 
+  .bottom-question-area .footer-tag img,
   .footer-tag img {
-    height: 24px;
-  }
-
-  /* 질문 화면 스크롤 하단 여백 확보 */
-  .bottom-question-area {
-    padding-bottom: 80px !important; 
+    height: 24px !important;
   }
 
   /* ---------------------------------------
-         결과 시리즈 및 로고 (완벽한 세로 배치)
-       --------------------------------------- */
-
+     3. 결과 화면 (세로 배치 및 축소)
+     --------------------------------------- */
   .result-content {
     display: flex;
     flex-direction: column;
     align-items: center; 
     width: 100%;
-    padding: 10px 0;
+    padding: 0;
   }
 
   .result-header {
@@ -572,10 +601,9 @@ body, html {
     align-items: center;
     gap: 15px;              
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
-  /* 로고와 이름을 세로로 묶어주는 영역 */
   .result-logo-area {
     display: flex;
     flex-direction: column;
@@ -597,9 +625,6 @@ body, html {
     margin: 0;
   }
 
-  /* ---------------------------------------
-       [2] 플랫폼 로고 (간격 좁게, 사이즈 작게)
-       --------------------------------------- */
   .platform-area {
     display: flex;
     flex-direction: row;
@@ -615,20 +640,14 @@ body, html {
     width: auto;
   }
 
-  /* ---------------------------------------
-       [3] 캐치프레이즈 박스 (더 축소)
-       --------------------------------------- */
   #catchphrase-box {
-    width: 85%;            /* 가로 너비 축소 */
-    padding: 25px 16px;    /* 내부 여백 축소로 부피 줄임 */
-    font-size: 0.95rem;    /* 글자 크기 축소 */
+    width: 85%;            
+    padding: 25px 16px;    
+    font-size: 0.95rem;    
     margin-bottom: 20px;
     text-align: center;
   }
 
-  /* ---------------------------------------
-       [4] 설명 (수정 없음 - 화면 유지)
-       --------------------------------------- */
   #result-desc-text {
     font-size: 0.95rem;
     line-height: 1.6;
@@ -637,24 +656,23 @@ body, html {
     word-break: keep-all; 
   }
 
-  /* ---------------------------------------
-       [5] Back to main 버튼 (더 작게)
-       --------------------------------------- */
   .back-btn {
     font-size: 1rem; 
     padding: 10px 24px;
     margin-top: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
 
-  /* 🖼️ 캐러셀 모바일 크기 유지 */
+  /* ---------------------------------------
+     4. 캐러셀 배너 (모바일 크기)
+     --------------------------------------- */
   .carousel-banner {
     width: 330px;
     height: 200px;
     margin: 10px auto;
   }
 
-  .carousel-track{
+  .carousel-track {
     width: 100%;
     height: 100%;
   }
@@ -663,6 +681,222 @@ body, html {
     width: 100%;
     height: auto;
   }
-    
 }
-    
+
+/* =========================================
+   실시간 랭킹 화면 스타일 (SORT RANKING)
+========================================= */
+.ranking-section {
+    width: 85%;
+    max-width: 500px;
+    margin: 0; /* 설명 박스 및 하단 버튼과의 여백 확보 */
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ranking-title {
+    font-size: 1.3rem;
+    font-weight: 800; /* Pretendard Bold */
+    text-align: center;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ranking-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* 1위, 2위, 3위 간의 수직 간격 */
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2); /* #ffffff 색상 및 opacity 20% */
+    border-radius: 20px; /* 코너 라디우스 20px */
+    padding: 16px 20px;
+    gap: 20px;
+    backdrop-filter: blur(4px); /* 뒤쪽 우주 영상이 은은하게 비치도록 세련미 추가 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.ranking-item:hover {
+    transform: translateY(-2px); /* 호버 시 미세한 팝업 효과 */
+}
+
+/* 좌측 로고 박스 */
+.ranking-item .logo-box {
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff; /* #ffffff 흰색 바탕 */
+    border-radius: 35px; /* 코너 라디우스 35px (정원 형태형성) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* 박스 크기 압축 방지 */
+    padding: 10px; /* 로고가 작게 박스 정중앙에 배치되도록 패딩 부여 */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.ranking-item .logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 로고 비율 깨짐 방지 및 정중앙 정렬 */
+}
+
+/* 우측 랭킹 텍스트 영역 */
+.ranking-item .text-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    color: #ffffff;
+}
+
+/* 1st, 2nd, 3rd 배지 */
+.ranking-item .rank-badge {
+    font-size: 1rem;
+    font-weight: 800; /* 볼드체 */
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+/* 시리즈 타이틀 (예: FINAL FANTASY I) */
+.ranking-item .series-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 2px 0 4px 0;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* 설명 문구 */
+.ranking-item .rank-desc {
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+    opacity: 0.9;
+    word-break: keep-all; /* 한글 단어 단위 개행으로 가독성 최적화 */
+}
+
+/* =========================================
+   실시간 랭킹 화면 스타일 (SORT RANKING)
+========================================= */
+.ranking-section {
+    width: 85%;
+    max-width: 500px;
+    margin: 10px; /* 설명 박스 및 하단 버튼과의 여백 확보 */
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ranking-title {
+    font-size: 1.3rem;
+    font-weight: 800; /* Pretendard Bold */
+    text-align: center;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ranking-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* 1위, 2위, 3위 간의 수직 간격 */
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2); /* #ffffff 색상 및 opacity 20% */
+    border-radius: 20px; /* 코너 라디우스 20px */
+    padding: 16px 20px;
+    gap: 20px;
+    backdrop-filter: blur(4px); /* 뒤쪽 우주 영상이 은은하게 비치도록 세련미 추가 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.ranking-item:hover {
+    transform: translateY(-2px); /* 호버 시 미세한 팝업 효과 */
+}
+
+/* 좌측 로고 박스 */
+.ranking-item .logo-box {
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff; /* #ffffff 흰색 바탕 */
+    border-radius: 35px; /* 코너 라디우스 35px (정원 형태형성) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* 박스 크기 압축 방지 */
+    padding: 10px; /* 로고가 작게 박스 정중앙에 배치되도록 패딩 부여 */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.ranking-item .logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 로고 비율 깨짐 방지 및 정중앙 정렬 */
+}
+
+/* 우측 랭킹 텍스트 영역 */
+.ranking-item .text-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    color: #ffffff;
+}
+
+/* 1st, 2nd, 3rd 배지 */
+.ranking-item .rank-badge {
+    font-size: 1rem;
+    font-weight: 800; /* 볼드체 */
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+/* 시리즈 타이틀 (예: FINAL FANTASY I) */
+.ranking-item .series-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 2px 0 4px 0;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* 설명 문구 */
+.ranking-item .rank-desc {
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+    opacity: 0.9;
+    word-break: keep-all; /* 한글 단어 단위 개행으로 가독성 최적화 */
+}
+
+/* 모바일 반응형 세부 조절 */
+@media screen and (max-width: 480px) {
+    .ranking-section {
+        width: 90%;
+        margin: 30px auto;
+    }
+    .ranking-item {
+        padding: 12px 16px;
+        gap: 15px;
+    }
+    .ranking-item .logo-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px; /* 모바일 크기에 맞춰 동률 축소 */
+        padding: 8px;
+    }
+    .ranking-item .series-title {
+        font-size: 1rem;
+    }
+    .ranking-item .rank-desc {
+        font-size: 0.75rem;
+    }
+}
